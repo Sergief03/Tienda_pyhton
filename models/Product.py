@@ -1,4 +1,5 @@
 from db import db
+
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -6,13 +7,16 @@ class Product(db.Model):
     name = db.Column(db.String(150), nullable=False)
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
+    img = db.Column(db.String(255))
 
+    # 🔹 Usa string para evitar import circular
     order_lines = db.relationship("OrderLine", backref="product", lazy=True)
 
-    def __init__(self, name, price, stock=0):
+    def __init__(self, name, price, stock=0, img=None):
         self.name = name
         self.price = price
         self.stock = stock
+        self.img = img
 
 
     def get_id(self):
