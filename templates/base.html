@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Tienda equipo 3{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  {% block styles %}{% endblock %}
+    <meta charset="UTF-8">
+    <title>Tienda Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header>
-    <h1>Tienda equipo 3</h1>
+
+<header>
+    <h1><a href="{{ url_for('index') }}">🛒 Tienda</a></h1>
+
     <nav>
-      {% if session.get('user') %}
-        <span>Hola, <b>{{ session.get('user') }}</b></span>
-        <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Página principal</a>
-        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
-      {% else %}
-        <a href="{{ url_for('login') }}" class="{{ 'active' if request.endpoint == 'login' }}">Iniciar sesión</a>
-        <a href="{{ url_for('register') }}" class="{{ 'active' if request.endpoint == 'register' }}">Registrarse</a>
-      {% endif %}
+        {% if usuario %}
+            <span>Hola, {{ usuario.username }}</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% if usuario.rol == 'admin' %}
+                <a href="{{ url_for('nuevo_producto') }}">➕ Nuevo producto</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Registro</a>
+        {% endif %}
     </nav>
-  </header>
-  {% block content %}{% endblock %}
-  {% block scripts %}{% endblock %}
+</header>
+
+<main>
+    {% block contenido %}{% endblock %}
+</main>
+
+<footer>
+    <p>© Tienda Flask</p>
+</footer>
+
 </body>
 </html>

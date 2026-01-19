@@ -1,5 +1,23 @@
-{% extends 'base.html' %}
-{% block title %}Página principal{% endblock %}
-{% block content %}
-<h2>Página principal</h2>
+{% extends "base.html" %}
+
+{% block contenido %}
+<form method="get" class="buscador">
+    <input type="text" name="q" placeholder="Buscar producto...">
+    <button type="submit">Buscar</button>
+</form>
+
+<div class="productos">
+    {% for producto in productos %}
+        <div class="producto">
+            {% if producto.img %}
+                <img src="{{ url_for('static', filename='uploads/' + producto.img) }}">
+            {% endif %}
+            <h3>{{ producto.nombre }}</h3>
+            <p>$ {{ producto.precio }}</p>
+            <a href="{{ url_for('detalle_producto', id=producto.id) }}">Ver detalle</a>
+        </div>
+    {% else %}
+        <p>No hay productos</p>
+    {% endfor %}
+</div>
 {% endblock %}
