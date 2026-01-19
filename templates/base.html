@@ -15,14 +15,14 @@
             <span>Hola, {{ usuario.username }}</span>
             <a href="{{ url_for('logout') }}">Logout</a>
             <a href="{{ url_for('ver_carrito') }}">🛒 Carrito</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Registro</a>
         {% endif %}
 
         {% if usuario.rol == 'admin' %}
             <a href="{{ url_for('nuevo_producto') }}">➕ Nuevo producto</a>
-        {% endif %}
-        {% else %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Registro</a>
+        
         {% endif %}
     </nav>
 </header>
