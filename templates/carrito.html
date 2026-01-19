@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h2>Mi carrito</h2>
+
+{% if productos_carrito %}
+    <table class="tabla-carrito">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in productos_carrito %}
+            <tr>
+                <td>{{ item.producto.nombre }}</td>
+                <td>${{ item.producto.precio }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>${{ item.subtotal }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('quitar_del_carrito', producto_id=item.producto.id) }}">
+                        <button class="danger" type="submit">Quitar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="total">Total: ${{ total }}</h3>
+
+    <form method="post" action="{{ url_for('vaciar_carrito') }}">
+        <button class="danger">Vaciar carrito</button>
+    </form>
+
+{% else %}
+    <p>Tu carrito está vacío.</p>
+{% endif %}
+
+<a href="{{ url_for('index') }}">← Seguir comprando</a>
+{% endblock %}

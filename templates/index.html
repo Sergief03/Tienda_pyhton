@@ -15,6 +15,10 @@
             <h3>{{ producto.nombre }}</h3>
             <p>$ {{ producto.precio }}</p>
             <a href="{{ url_for('detalle_producto', id=producto.id) }}">Ver detalle</a>
+            <form method="post" action="{{ url_for('agregar_al_carrito', id=producto.id) }}">
+                <button type="submit">Agregar al carrito</button>
+            </form>
+
         </div>
     {% else %}
         <p>No hay productos</p>

@@ -79,3 +79,21 @@ button.danger {
 .buscador {
     margin-bottom: 20px;
 }
+
+.tabla-carrito {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.tabla-carrito th,
+.tabla-carrito td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.total {
+    text-align: right;
+    margin-top: 10px;
+}

@@ -12,10 +12,10 @@
     <p><strong>Stock:</strong> {{ producto.stock }}</p>
 
     {% if usuario %}
-        <form method="post" action="{{ url_for('toggle_carrito', producto_id=producto.id) }}">
-            <button type="submit">❤️ Agregar / Quitar</button>
+        <form method="post" action="{{ url_for('agregar_al_carrito', id=producto.id) }}">
+            <button type="submit">🛒 Agregar al carrito</button>
         </form>
-    {% endif %}
+
 
     {% if usuario and usuario.rol == 'admin' %}
         <a href="{{ url_for('editar_producto', id=producto.id) }}">✏️ Editar</a>
