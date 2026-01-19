@@ -162,7 +162,7 @@ def login():
 
         return "Credenciales inválidas", 401
 
-    return render_template('login.html')
+    return render_template('login.html', usuario=usuario_actual())
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -181,7 +181,7 @@ def register():
 
         return redirect(url_for('login'))
 
-    return render_template('register.html')
+    return render_template('register.html', usuario=usuario_actual())
 
 @app.route('/logout')
 def logout():
