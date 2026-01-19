@@ -5,6 +5,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
     password = db.Column(db.String(255), nullable=False)
+    roles = db.Column(JSON, nullable=False, default=list)
     
     def __init__(self, username, password):
         self.username = username
