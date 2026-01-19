@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block contenido %}
-{% if usuario and usuario.rol == 'admin' %}
+{% if usuario and 'admin' in usuario.roles %}
 <h2>Agregar producto</h2>
 
 <form method="post" action="{{ url_for('agregar_producto') }}" enctype="multipart/form-data" class="formulario">

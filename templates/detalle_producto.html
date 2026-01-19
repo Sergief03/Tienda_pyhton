@@ -2,22 +2,22 @@
 
 {% block contenido %}
 <div class="detalle">
-    <h2>{{ producto.nombre }}</h2>
+    <h2>{{ producto.name }}</h2>
 
     {% if producto.img %}
         <img src="{{ url_for('static', filename='uploads/' + producto.img) }}">
     {% endif %}
 
-    <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+    <p><strong>Precio:</strong> ${{ producto.price }}</p>
     <p><strong>Stock:</strong> {{ producto.stock }}</p>
 
     {% if usuario %}
-        <form method="post" action="{{ url_for('agregar_al_carrito', id=producto.id) }}">
+        <form method="post" action="{{ url_for('agregar_al_carrito', producto_id=producto.id) }}">
             <button type="submit">🛒 Agregar al carrito</button>
         </form>
+    {% endif %}
 
-
-    {% if usuario and usuario.rol == 'admin' %}
+    {% if usuario and 'admin' in usuario.roles%}
         <a href="{{ url_for('editar_producto', id=producto.id) }}">✏️ Editar</a>
 
         <form method="post" action="{{ url_for('eliminar_producto', id=producto.id) }}">
