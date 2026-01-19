@@ -22,3 +22,11 @@ class Usuario(db.Model):
 
     def set_password(self, password):
         self.password = password
+
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "roles": self.roles
+        }
