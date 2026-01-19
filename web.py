@@ -38,7 +38,6 @@ def index():
     else:
         productos = Producto.query.all()
 
-    # Cambiado a 'index.html' (base.html suele ser el esqueleto, no la página principal)
     return render_template(
         'index.html', 
         productos=productos,
@@ -51,7 +50,6 @@ def detalle_producto(id):
     if not producto:
         return "Producto no encontrado", 404
 
-    # Actualizado según tu imagen: 'detalle_producto.html'
     return render_template(
         'detalle_producto.html',
         producto=producto,
@@ -67,7 +65,6 @@ def nuevo_producto():
     if not admin_requerido():
         return redirect(url_for('index'))
 
-    # Actualizado según tu imagen: 'form_add.html'
     return render_template(
         'form_add.html',
         usuario=usuario_actual()
@@ -108,7 +105,6 @@ def editar_producto(id):
     if not producto:
         return "Producto no encontrado", 404
 
-    # Actualizado según tu imagen: 'form_edit.html'
     return render_template(
         'form_edit.html',
         producto=producto,
@@ -149,7 +145,7 @@ def eliminar_producto(id):
     return redirect(url_for('index'))
 
 # -------------------
-# USUARIOS
+# USUARIOS / AUTENTICACIÓN
 # -------------------
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -166,7 +162,6 @@ def login():
 
         return "Credenciales inválidas", 401
 
-    # 'login.html' coincide con tu imagen
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -186,27 +181,25 @@ def register():
 
         return redirect(url_for('login'))
 
-    # 'register.html' coincide con tu imagen
     return render_template('register.html')
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)
+    session.pop('carrito', None) # Opcional: limpiar carrito al salir
     return redirect(url_for('login'))
 
 # -------------------
-# CARRITO DE LA SESION
+# CARRITO DE LA SESIÓN (LÓGICA COMPLETA)
 # -------------------
 
-# Nota: No veo 'carrito.html' en tu imagen. Asegúrate de crearlo 
-# o cambiar el nombre aquí si vas a usar la página del carrito.
 @app.route('/carrito')
 def ver_carrito():
     if not login_requerido():
         return redirect(url_for('login'))
 
     carrito = session.get('carrito', {})
-    productos = []
+    productos_en_carrito = []
     total = 0
 
     for producto_id, cantidad in carrito.items():
@@ -214,20 +207,71 @@ def ver_carrito():
         if producto:
             subtotal = producto.precio * cantidad
             total += subtotal
-            productos.append({
+            productos_en_carrito.append({
                 'producto': producto,
                 'cantidad': cantidad,
                 'subtotal': subtotal
             })
 
-    # IMPORTANTE: He puesto 'index.html' temporalmente porque no veo 
-    # 'carrito.html' en tu carpeta. Si lo creas, cambia esto.
+    # Si no tienes 'carrito.html', asegúrate de crearlo. 
+    # Por ahora lo redirijo a una plantilla de carrito.
     return render_template(
-        'index.html', 
-        productos_carrito=productos,
+        'carrito.html', 
+        productos_carrito=productos_en_carrito,
         total=total,
         usuario=usuario_actual()
     )
+
+@app.route('/carrito/agregar/<int:producto_id>', methods=['POST'])
+def agregar_al_carrito(producto_id):
+    if not login_requerido():
+        return redirect(url_for('login'))
+
+    producto = obtener_producto(producto_id)
+    if not producto:
+        return "Producto no encontrado", 404
+
+    # Obtener el carrito actual o crear uno vacío
+    carrito = session.get('carrito', {})
+
+    # Añadir o incrementar cantidad
+    id_str = str(producto_id)
+    if id_str in carrito:
+        carrito[id_str] += 1
+    else:
+        carrito[id_str] = 1
+
+    session['carrito'] = carrito
+    session.modified = True # Importante para que Flask detecte cambios en dicts
+
+    return redirect(request.referrer or url_for('index'))
+
+@app.route('/carrito/quitar/<int:producto_id>', methods=['POST'])
+def quitar_del_carrito(producto_id):
+    if not login_requerido():
+        return redirect(url_for('login'))
+
+    carrito = session.get('carrito', {})
+    id_str = str(producto_id)
+
+    if id_str in carrito:
+        carrito.pop(id_str)
+        session['carrito'] = carrito
+        session.modified = True
+
+    return redirect(url_for('ver_carrito'))
+
+@app.route('/carrito/vaciar', methods=['POST'])
+def vaciar_carrito():
+    if not login_requerido():
+        return redirect(url_for('login'))
+
+    session.pop('carrito', None)
+    return redirect(url_for('ver_carrito'))
+
+# -------------------
+# ARRANQUE DE LA APP
+# -------------------
 
 if __name__ == '__main__':
     with app.app_context():
