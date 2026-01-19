@@ -144,9 +144,9 @@ def eliminar_producto(id):
 
     return redirect(url_for('index'))
 
-# -------------------
+# --------------------
 # USUARIOS / AUTENTICACIÓN
-# -------------------
+# --------------------
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
