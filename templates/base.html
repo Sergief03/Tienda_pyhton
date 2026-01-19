@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Tienda equipo 3{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block styles %}{% endblock %}
+</head>
+<body>
+  <header>
+    <h1>Tienda equipo 3</h1>
+    <nav>
+      {% if session.get('user') %}
+        <span>Hola, <b>{{ session.get('user') }}</b></span>
+        <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Página principal</a>
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="{{ 'active' if request.endpoint == 'login' }}">Iniciar sesión</a>
+        <a href="{{ url_for('register') }}" class="{{ 'active' if request.endpoint == 'register' }}">Registrarse</a>
+      {% endif %}
+    </nav>
+  </header>
+  {% block content %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>
