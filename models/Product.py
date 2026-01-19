@@ -1,3 +1,4 @@
+from db import db
 class Product(db.Model):
     __tablename__ = "products"
 
